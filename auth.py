@@ -3,9 +3,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt import ExpiredSignatureError, InvalidSignatureError
 import jwt
 from datetime import datetime, timedelta
-from model import ToDo
-from mgdb import collection
 from pydantic import BaseModel
+import CRUD
 
 app = FastAPI()
 
@@ -47,21 +46,3 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-@app.get("/toDos")
-def get_todos(user: str = Depends(get_user)):
-    return {"message":"no data"}
-
-@app.post("/toDos")
-def create_todo(toDo: ToDo, user: str = Depends(get_user)):
-    collection.insert_one(toDo.dict())
-    return toDo
-
-@app.put("/toDos/{id}")
-def update_todo(id: int, toDo: ToDo, user: str = Depends(get_user)):
-    collection.update_one({'id': id}, {'$set': toDo.dict()})
-    return toDo
- 
-@app.delete("/toDos/{id}")
-def delete_todo(id: int, user: str = Depends(get_user)):
-    collection.delete_one({'id': id})
-    return {'message': 'Todo deleted'}
