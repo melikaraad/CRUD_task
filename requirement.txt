@@ -1,0 +1,6 @@
+PACKAGES NEEDED:
+fastapi 
+uvicorn[standard]
+pydantic 
+pymongo
+PyJWT
